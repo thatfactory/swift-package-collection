@@ -1,35 +1,33 @@
 {
-    "name": "backslash-f Swift Packages",
-    "overview": "A collection of Swift Packages by backslash-f",
+    "formatVersion": "2.0",
+    "revision": 1,
+    "name": "ThatFactory Swift Packages",
+    "overview": "A collection of Swift Packages by ThatFactory.",
     "keywords":
     [
-        "aes",
-        "advanced encryption standard",
+        "Combine",
+        "CoreGraphics",
+        "GameplayKit",
+        "Observation",
+        "OSLog",
+        "asyncsequence",
         "automation",
         "backslash-f",
         "bot",
         "client",
-        "Combine",
-        "CoreGraphics",
-        "crypto",
         "device",
         "extensions",
         "game controller",
         "game development",
-        "GameplayKit",
         "helper",
         "image manipulation",
         "logger",
         "network",
-        "Observation",
         "observable object",
-        "OSLog",
-        "SpriteKit",
         "state machine",
         "swift",
-        "Swift Crypto",
+        "ThatFactory",
         "toolbox",
-        "trading",
         "unified logging",
         "util",
         "websocket"
@@ -37,44 +35,45 @@
     "packages":
     [
         {
-            "url": "https://github.com/backslash-f/aescryptable.git"
+            "url": "https://github.com/thatfactory/aescryptable.git"
         },
         {
-            "url": "https://github.com/backslash-f/alma.git"
+            "url": "https://github.com/thatfactory/alma.git"
         },
         {
-            "url": "https://github.com/backslash-f/applogger.git"
+            "url": "https://github.com/thatfactory/applogger.git"
         },
         {
-            "url": "https://github.com/backslash-f/cgkstatemachine.git"
+            "url": "https://github.com/thatfactory/cgkstatemachine.git"
         },
         {
-            "url": "https://github.com/backslash-f/cskscene.git"
+            "url": "https://github.com/thatfactory/cskscene.git"
         },
         {
-            "url": "https://github.com/backslash-f/device.git"
+            "url": "https://github.com/thatfactory/device.git"
         },
         {
-            "url": "https://github.com/backslash-f/extensions.git"
+            "url": "https://github.com/thatfactory/extensions.git"
         },
         {
-            "url": "https://github.com/backslash-f/gcoverseer.git"
+            "url": "https://github.com/thatfactory/gcoverseer.git"
         },
         {
-            "url": "https://github.com/backslash-f/observable-websocket-client.git"
+            "url": "https://github.com/thatfactory/observable-websocket-client.git"
         },
         {
-            "url": "https://github.com/backslash-f/simage.git"
+            "url": "https://github.com/thatfactory/simage.git"
         },
         {
-            "url": "https://github.com/backslash-f/swift-trader.git"
+            "url": "https://github.com/thatfactory/swift-trader.git"
         },
         {
-            "url": "https://github.com/backslash-f/toolbox.git"
+            "url": "https://github.com/thatfactory/toolbox.git"
         }
     ],
     "author":
     {
-        "name": "backslash-f"
+        "name": "ThatFactory",
+        "email": "dev@thatfactory.com"
     }
 }
