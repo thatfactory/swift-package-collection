@@ -1,0 +1,64 @@
+---
+name: Generate & Publish Package Collection
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: [self-hosted, macOS]
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v6
+
+      - name: Clone Swift Package Collection Generator (main)
+        run: |
+          git clone https://github.com/swiftlang/swift-package-collection-generator.git
+
+      - name: Generate collection.json from packages.json
+        run: |
+          mkdir -p public
+
+          cd swift-package-collection-generator
+          swift run -c release package-collection-generate \
+            ../packages.json ../public/collection.json \
+            --auth-token github:github.com:${{ secrets.GITHUB_TOKEN }}
+
+      - name: Copy extra files for the site (optional)
+        run: |
+          if [ -f README.md ]; then
+            cp README.md public/index.md
+          fi
+
+          if [ -f packages.png ]; then
+            cp packages.png public/
+          fi
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: ./public
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
