@@ -23,9 +23,9 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v6
 
-      - name: Clone Swift Package Collection Generator (main)
+      - name: Clone Swift Package Collection Generator (5.10)
         run: |
-          git clone https://github.com/swiftlang/swift-package-collection-generator.git
+          git clone --branch 5.10 --depth 1 https://github.com/swiftlang/swift-package-collection-generator.git
 
       - name: Generate collection.json from packages.json
         run: |
@@ -34,9 +34,9 @@ jobs:
           cd swift-package-collection-generator
           swift run -c release package-collection-generate \
             ../packages.json ../public/collection.json \
-            --auth-token github:github.com:${{ secrets.GITHUB_TOKEN }}
+            --auth-token github:github.com:${{ secrets.PACKAGE_COLLECTION_TOKEN }}
 
-      - name: Copy extra files for the site (optional)
+      - name: Copy extra files for the site
         run: |
           if [ -f README.md ]; then
             cp README.md public/index.md
