@@ -1,5 +1,5 @@
 ---
-name: Generate | Sign | Publish
+name: generate-sign-publish
 
 on:
   push:
@@ -46,7 +46,7 @@ jobs:
 
           cd swift-package-collection-generator
 
-          # Sign: input, output, key, then full chain (leaf -> intermediate -> root)
+          # Sign: input, output, key, then full chain (leaf -> WWDR G3 -> Apple Root CA)
           swift run -c release package-collection-sign \
             ../public/collection.json \
             ../public/collection.signed.json \
