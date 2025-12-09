@@ -1,5 +1,5 @@
 ---
-name: generate-sign-publish
+name: release
 
 on:
   push:
