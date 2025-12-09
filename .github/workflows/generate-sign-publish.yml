@@ -38,24 +38,28 @@ jobs:
 
       - name: Sign collection.json
         run: |
-          # Recreate key + cert from secrets
-          echo "${{ secrets.PACKAGE_COLLECTION_SIGNING_KEY }}"  | base64 --decode > private-key.pem
-          echo "${{ secrets.PACKAGE_COLLECTION_SIGNING_CERT }}" | base64 --decode > certificate.cer
+          # Recreate key + full cert chain from secrets (DER certs)
+          echo "${{ secrets.PACKAGE_COLLECTION_SIGNING_KEY }}"        | base64 --decode > private-key.pem
+          echo "${{ secrets.PACKAGE_COLLECTION_SIGNING_CERT }}"       | base64 --decode > signing-cert.cer
+          echo "${{ secrets.PACKAGE_COLLECTION_CA_INTERMEDIATE }}"    | base64 --decode > intermediate.cer
+          echo "${{ secrets.PACKAGE_COLLECTION_CA_ROOT }}"            | base64 --decode > root.cer
 
           cd swift-package-collection-generator
 
-          # Sign: input, output, key, cert
+          # Sign: input, output, key, then full chain (leaf -> intermediate -> root)
           swift run -c release package-collection-sign \
             ../public/collection.json \
             ../public/collection.signed.json \
             ../private-key.pem \
-            ../certificate.cer
+            ../signing-cert.cer \
+            ../intermediate.cer \
+            ../root.cer
 
           # Replace unsigned with signed
           mv ../public/collection.signed.json ../public/collection.json
 
           # Clean up secrets from workspace
-          rm ../private-key.pem ../certificate.cer
+          rm ../private-key.pem ../signing-cert.cer ../intermediate.cer ../root.cer
 
       - name: Copy extra files for the site
         run: |
