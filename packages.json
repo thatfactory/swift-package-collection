@@ -35,9 +35,6 @@
     "packages":
     [
         {
-            "url": "https://github.com/thatfactory/aescryptable.git"
-        },
-        {
             "url": "https://github.com/thatfactory/alma.git"
         },
         {
@@ -63,9 +60,6 @@
         },
         {
             "url": "https://github.com/thatfactory/simage.git"
-        },
-        {
-            "url": "https://github.com/thatfactory/swift-trader.git"
         },
         {
             "url": "https://github.com/thatfactory/toolbox.git"
