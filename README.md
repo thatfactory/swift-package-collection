@@ -3,7 +3,7 @@
 [![release](https://github.com/thatfactory/swift-package-collection/actions/workflows/release.yml/badge.svg)](https://github.com/thatfactory/swift-package-collection/actions/workflows/release.yml)
 
 # Swift Package Collection 📦
-A collection of Swift Packages by ThatFactory and [@backslash-f](https://github.com/backslash-f).
+A collection of Swift Packages by ThatFactory.
 
 # Packages
 👾 [ALMA](https://github.com/thatfactory/alma): Game Engine for the Apple ecosystem.  
