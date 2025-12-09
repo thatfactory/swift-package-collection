@@ -1,5 +1,5 @@
 ---
-name: Generate & Publish Package Collection
+name: Generate | Sign | Publish
 
 on:
   push:
@@ -36,6 +36,27 @@ jobs:
             ../packages.json ../public/collection.json \
             --auth-token github:github.com:${{ secrets.PACKAGE_COLLECTION_TOKEN }}
 
+      - name: Sign collection.json
+        run: |
+          # Recreate key + cert from secrets
+          echo "${{ secrets.PACKAGE_COLLECTION_SIGNING_KEY }}"  | base64 --decode > private-key.pem
+          echo "${{ secrets.PACKAGE_COLLECTION_SIGNING_CERT }}" | base64 --decode > certificate.cer
+
+          cd swift-package-collection-generator
+
+          # Sign: input, output, key, cert
+          swift run -c release package-collection-sign \
+            ../public/collection.json \
+            ../public/collection.signed.json \
+            ../private-key.pem \
+            ../certificate.cer
+
+          # Replace unsigned with signed
+          mv ../public/collection.signed.json ../public/collection.json
+
+          # Clean up secrets from workspace
+          rm ../private-key.pem ../certificate.cer
+
       - name: Copy extra files for the site
         run: |
           if [ -f README.md ]; then
@@ -50,8 +71,10 @@ jobs:
         uses: actions/upload-pages-artifact@v4
         with:
           path: ./public
+          name: github-pages
 
   deploy:
+    if: github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
     environment:
