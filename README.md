@@ -1,6 +1,6 @@
 [![swift](https://img.shields.io/badge/swift-ea7a50.svg?logo=swift&logoColor=white)](https://developer.apple.com/swift/)
 [![xcode](https://img.shields.io/badge/xcode-50ace8.svg?logo=xcode&logoColor=white)](https://developer.apple.com/xcode/)
-[![spm](https://img.shields.io/badge/spm-b68f6a.svg?logo=hackthebox&logoColor=white)](https://developer.apple.com/documentation/xcode/swift-packages)
+[![spm](https://img.shields.io/badge/spm-b68f6a.svg?logo=gitlfs&logoColor=white)](https://developer.apple.com/documentation/xcode/swift-packages)
 [![release](https://github.com/thatfactory/swift-package-collection/actions/workflows/release.yml/badge.svg)](https://github.com/thatfactory/swift-package-collection/actions/workflows/release.yml)
 
 # Swift Package Collection 📦
