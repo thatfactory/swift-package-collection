@@ -14,8 +14,7 @@ A collection of Swift Packages by ThatFactory.
 - 📱 [Device](https://github.com/thatfactory/device): Retrieves information about the host device.  
 - ⚙️ [Extensions](https://github.com/thatfactory/extensions): A collection of useful Swift/SwiftUI extensions.  
 - 🎮 [GCOverseer](https://github.com/thatfactory/gcoverseer): Observe and manage game controllers using Combine.  
-- ⚡ [ObservableWebSocketClient](https://github.com/thatfactory/observable-websocket-client): Establishes WebSocket connections, publishes received messages/errors.  
-- 🖼 [SImage](https://github.com/thatfactory/simage): Multiplatform Core Graphics wrapper.  
+- ⚡ [ObservableWebSocketClient](https://github.com/thatfactory/observable-websocket-client): Establishes WebSocket connections, publishes received messages/errors.   
 - 🧰 [Toolbox](https://github.com/thatfactory/toolbox): A collection of useful Swift tools.
 
 # Integration
