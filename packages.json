@@ -5,28 +5,30 @@
     "overview": "A collection of Swift Packages by ThatFactory.",
     "keywords":
     [
-        "Combine",
-        "CoreGraphics",
-        "GameplayKit",
-        "Observation",
-        "OSLog",
         "asyncsequence",
         "automation",
         "backslash-f",
         "bot",
         "client",
+        "Combine",
+        "CoreGraphics",
         "device",
         "extensions",
+        "GameplayKit",
         "game controller",
         "game development",
         "helper",
         "image manipulation",
         "logger",
         "network",
+        "Observation",
         "observable object",
+        "OSLog",
+        "PhotoKit",
         "state machine",
         "swift",
         "ThatFactory",
+        "thumbnail",
         "toolbox",
         "unified logging",
         "util",
@@ -56,6 +58,9 @@
             "url": "https://github.com/thatfactory/gcoverseer.git"
         },
         {
+            "url": "https://github.com/thatfactory/image-tools.git"
+        },
+        {
             "url": "https://github.com/thatfactory/observable-websocket-client.git"
         },
         {
@@ -65,6 +70,6 @@
     "author":
     {
         "name": "ThatFactory",
-        "email": "dev@thatfactory.com"
+        "email": "contact@thatfactory.com"
     }
 }
