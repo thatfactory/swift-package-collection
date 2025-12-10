@@ -9,12 +9,13 @@ A collection of Swift Packages by ThatFactory.
 # Packages
 - 👾 [ALMA](https://github.com/thatfactory/alma): Game Engine for the Apple ecosystem.  
 - 📒 [AppLogger](https://github.com/thatfactory/applogger): Wrapper around Apple's Swift logging APIs.  
-- 🔀 [CGKStateMachine](https://github.com/thatfactory/cgkstatemachine): Allows GKState changes to be observed via Combine.  
-- 🌃 [CSKScene](https://github.com/thatfactory/cskscene): Custom SKScene with debugging features and game controller observing capabilities.  
+- 🔀 [CGKStateMachine](https://github.com/thatfactory/cgkstatemachine): Allows `GKState` changes to be observed via `Combine`.  
+- 🌃 [CSKScene](https://github.com/thatfactory/cskscene): Custom `SKScene` with debugging features and game controller observing capabilities.  
 - 📱 [Device](https://github.com/thatfactory/device): Retrieves information about the host device.  
 - ⚙️ [Extensions](https://github.com/thatfactory/extensions): A collection of useful Swift/SwiftUI extensions.  
-- 🎮 [GCOverseer](https://github.com/thatfactory/gcoverseer): Observe and manage game controllers using Combine.  
-- ⚡ [ObservableWebSocketClient](https://github.com/thatfactory/observable-websocket-client): Establishes WebSocket connections, publishes received messages/errors.   
+- 🎮 [GCOverseer](https://github.com/thatfactory/gcoverseer): Observe and manage game controllers using `Combine`.  
+- 🖼 [ImageTools](https://github.com/thatfactory/image-tools): Multiplatform `PhotoKit`/`Core Graphics` wrapper.  
+- ⚡ [ObservableWebSocketClient](https://github.com/thatfactory/observable-websocket-client): Establishes `WebSocket` connections, publishes received messages/errors.   
 - 🧰 [Toolbox](https://github.com/thatfactory/toolbox): A collection of useful Swift tools.
 
 # Integration
