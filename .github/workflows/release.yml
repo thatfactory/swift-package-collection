@@ -5,9 +5,16 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      source_repo:
+        required: false
+        type: string
+      source_version:
+        required: false
+        type: string
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -18,17 +25,30 @@ concurrency:
 jobs:
   build:
     runs-on: [self-hosted, macOS]
+    outputs:
+      no_changes: ${{ steps.detect.outputs.no_changes }}
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v6
+        with:
+          persist-credentials: true
 
       - name: Clone Swift Package Collection Generator (5.10)
         run: |
+          set -euo pipefail
           git clone --branch 5.10 --depth 1 https://github.com/swiftlang/swift-package-collection-generator.git
+
+      - name: Prepare previous collection for diff
+        run: |
+          set -euo pipefail
+          mkdir -p public .tmp
+          curl -fsSL "https://thatfactory.github.io/swift-package-collection/collection.json" \
+            -o .tmp/collection.prev.json || echo '{}' > .tmp/collection.prev.json
 
       - name: Generate collection.json from packages.json
         run: |
+          set -euo pipefail
           mkdir -p public
 
           cd swift-package-collection-generator
@@ -36,8 +56,160 @@ jobs:
             ../packages.json ../public/collection.json \
             --auth-token github:github.com:${{ secrets.PACKAGE_COLLECTION_TOKEN }}
 
-      - name: Sign collection.json
+      - name: Detect changes + bump revision
+        id: detect
         run: |
+          set -euo pipefail
+
+          PREV=".tmp/collection.prev.json"
+          NEXT="public/collection.json"
+
+          if cmp -s "$PREV" "$NEXT"; then
+            echo "NO_CHANGES=true" >> "$GITHUB_ENV"
+            echo "no_changes=true" >> "$GITHUB_OUTPUT"
+            echo "No changes in collection.json"
+            exit 0
+          fi
+
+          echo "NO_CHANGES=false" >> "$GITHUB_ENV"
+          echo "no_changes=false" >> "$GITHUB_OUTPUT"
+
+          REV=$(jq -r '.revision // 0' packages.json)
+          NEW_REV=$((REV+1))
+
+          jq ".revision=$NEW_REV" packages.json > .tmp/packages.bumped.json
+          mv .tmp/packages.bumped.json packages.json
+
+          echo "NEW_REV=$NEW_REV" >> "$GITHUB_ENV"
+          echo "Bumped revision: $REV -> $NEW_REV"
+
+      - name: Regenerate collection.json with bumped revision
+        if: env.NO_CHANGES != 'true'
+        run: |
+          set -euo pipefail
+          cd swift-package-collection-generator
+          swift run -c release package-collection-generate \
+            ../packages.json ../public/collection.json \
+            --auth-token github:github.com:${{ secrets.PACKAGE_COLLECTION_TOKEN }}
+
+      - name: Generate CHANGELOG entry
+        if: env.NO_CHANGES != 'true'
+        run: |
+          set -euo pipefail
+          mkdir -p .tmp
+
+          PREV=".tmp/collection.prev.json"
+          NEXT="public/collection.json"
+
+          # Extract "url version" pairs from both
+          jq -r '
+            .packages? // [] |
+            .[] as $p |
+            ($p.repositoryURL // $p.url // "") as $u |
+            ($p.versions? // [])[] |
+            "\($u) \(.version)"
+          ' "$PREV" | sort -u > .tmp/prev_pairs.txt || true
+
+          jq -r '
+            .packages? // [] |
+            .[] as $p |
+            ($p.repositoryURL // $p.url // "") as $u |
+            ($p.versions? // [])[] |
+            "\($u) \(.version)"
+          ' "$NEXT" | sort -u > .tmp/next_pairs.txt || true
+
+          # Added/removed pairs
+          comm -13 .tmp/prev_pairs.txt .tmp/next_pairs.txt > .tmp/added_pairs.txt || true
+          comm -23 .tmp/prev_pairs.txt .tmp/next_pairs.txt > .tmp/removed_pairs.txt || true
+
+          python3 - <<'PY'
+          from collections import defaultdict
+          from datetime import datetime, timezone
+          import os
+
+          def read_pairs(path):
+            d = defaultdict(list)
+            if not os.path.exists(path):
+              return d
+            with open(path, "r", encoding="utf-8") as f:
+              for line in f:
+                line = line.strip()
+                if not line:
+                  continue
+                url, ver = line.split(" ", 1)
+                d[url].append(ver)
+            for k in d:
+              d[k] = sorted(set(d[k]))
+            return d
+
+          added = read_pairs(".tmp/added_pairs.txt")
+          removed = read_pairs(".tmp/removed_pairs.txt")
+
+          now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
+          src_repo = os.environ.get("SRC_REPO", "").strip()
+          src_ver  = os.environ.get("SRC_VER", "").strip()
+          revision = os.environ.get("NEW_REV", "").strip()
+
+          lines = []
+          title_bits = [now]
+          if revision:
+            title_bits.append(f"revision {revision}")
+          header = " — ".join(title_bits)
+
+          lines.append(f"## {header}")
+          if src_repo or src_ver:
+            lines.append(f"_Triggered by_ `{src_repo}` `{src_ver}`")
+          lines.append("")
+
+          def render_section(name, data):
+            lines.append(f"### {name}")
+            if not data:
+              lines.append("- _(none)_")
+              lines.append("")
+              return
+            for url in sorted(data.keys()):
+              vers = ", ".join(f"`{v}`" for v in data[url])
+              lines.append(f"- **{url}**: {vers}")
+            lines.append("")
+
+          render_section("Added", added)
+          render_section("Removed", removed)
+
+          lines.append("---")
+          lines.append("")
+
+          with open(".tmp/CHANGELOG_ENTRY.md", "w", encoding="utf-8") as f:
+            f.write("\n".join(lines))
+          PY
+        env:
+          SRC_REPO: ${{ inputs.source_repo }}
+          SRC_VER: ${{ inputs.source_version }}
+          NEW_REV: ${{ env.NEW_REV }}
+
+      - name: Prepend CHANGELOG entry
+        if: env.NO_CHANGES != 'true'
+        run: |
+          set -euo pipefail
+          touch CHANGELOG.md
+          cat .tmp/CHANGELOG_ENTRY.md CHANGELOG.md > .tmp/CHANGELOG_NEW.md
+          mv .tmp/CHANGELOG_NEW.md CHANGELOG.md
+
+      - name: Commit revision bump + changelog
+        if: env.NO_CHANGES != 'true'
+        uses: iarekylew00t/verified-bot-commit@v2
+        with:
+          message: >
+            Update collection (rev ${{ env.NEW_REV }})
+            ${{ inputs.source_repo && format('— {0} {1}', inputs.source_repo, inputs.source_version) || '' }}
+          files: |
+            packages.json
+            CHANGELOG.md
+
+      - name: Sign collection.json
+        if: env.NO_CHANGES != 'true'
+        run: |
+          set -euo pipefail
+
           # Recreate key + full cert chain from secrets (DER certs)
           echo "${{ secrets.PACKAGE_COLLECTION_SIGNING_KEY }}"        | base64 --decode > private-key.pem
           echo "${{ secrets.PACKAGE_COLLECTION_SIGNING_CERT }}"       | base64 --decode > signing-cert.cer
@@ -62,7 +234,9 @@ jobs:
           rm ../private-key.pem ../signing-cert.cer ../intermediate.cer ../root.cer
 
       - name: Copy extra files for the site
+        if: env.NO_CHANGES != 'true'
         run: |
+          set -euo pipefail
           if [ -f README.md ]; then
             cp README.md public/index.md
           fi
@@ -71,14 +245,47 @@ jobs:
             cp packages.png public/
           fi
 
+          # Publish changelog on Pages too
+          if [ -f CHANGELOG.md ]; then
+            cp CHANGELOG.md public/CHANGELOG.md
+          fi
+
+      - name: Generate Shields badges endpoints
+        if: env.NO_CHANGES != 'true'
+        run: |
+          set -euo pipefail
+          mkdir -p public/badges
+
+          REV=$(jq -r '.revision // 0' packages.json)
+          UPDATED=$(date -u +"%Y-%m-%d")
+
+          cat > public/badges/revision.json <<EOF
+          {
+            "schemaVersion": 1,
+            "label": "revision",
+            "message": "${REV}",
+            "color": "blue"
+          }
+          EOF
+
+          cat > public/badges/updated.json <<EOF
+          {
+            "schemaVersion": 1,
+            "label": "updated",
+            "message": "${UPDATED}",
+            "color": "blue"
+          }
+          EOF
+
       - name: Upload Pages artifact
+        if: env.NO_CHANGES != 'true'
         uses: actions/upload-pages-artifact@v4
         with:
           path: ./public
           name: github-pages
 
   deploy:
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' && needs.build.outputs.no_changes != 'true'
     needs: build
     runs-on: ubuntu-latest
     environment:
