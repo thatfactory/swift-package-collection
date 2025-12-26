@@ -1,8 +1,8 @@
 {
     "formatVersion": "2.0",
     "revision": 1,
-    "name": "ThatFactory Swift Packages",
-    "overview": "A collection of Swift Packages by ThatFactory.",
+    "name": "Packages by ThatFactory",
+    "overview": "A collection of packages authored by ThatFactory.",
     "keywords":
     [
         "asyncsequence",
