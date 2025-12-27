@@ -1,75 +1,72 @@
 {
-    "formatVersion": "2.0",
-    "revision": 1,
-    "name": "Packages by ThatFactory",
-    "overview": "A collection of packages authored by ThatFactory.",
-    "keywords":
-    [
-        "asyncsequence",
-        "automation",
-        "backslash-f",
-        "bot",
-        "client",
-        "Combine",
-        "CoreGraphics",
-        "device",
-        "extensions",
-        "GameplayKit",
-        "game controller",
-        "game development",
-        "helper",
-        "image manipulation",
-        "logger",
-        "network",
-        "Observation",
-        "observable object",
-        "OSLog",
-        "PhotoKit",
-        "state machine",
-        "swift",
-        "ThatFactory",
-        "thumbnail",
-        "toolbox",
-        "unified logging",
-        "util",
-        "websocket"
-    ],
-    "packages":
-    [
-        {
-            "url": "https://github.com/thatfactory/alma.git"
-        },
-        {
-            "url": "https://github.com/thatfactory/applogger.git"
-        },
-        {
-            "url": "https://github.com/thatfactory/cgkstatemachine.git"
-        },
-        {
-            "url": "https://github.com/thatfactory/cskscene.git"
-        },
-        {
-            "url": "https://github.com/thatfactory/device.git"
-        },
-        {
-            "url": "https://github.com/thatfactory/extensions.git"
-        },
-        {
-            "url": "https://github.com/thatfactory/gcoverseer.git"
-        },
-        {
-            "url": "https://github.com/thatfactory/image-tools.git"
-        },
-        {
-            "url": "https://github.com/thatfactory/observable-websocket-client.git"
-        },
-        {
-            "url": "https://github.com/thatfactory/toolbox.git"
-        }
-    ],
-    "author":
+  "formatVersion": "2.0",
+  "revision": 2,
+  "name": "Packages by ThatFactory",
+  "overview": "A collection of packages authored by ThatFactory.",
+  "keywords": [
+    "asyncsequence",
+    "automation",
+    "backslash-f",
+    "bot",
+    "client",
+    "Combine",
+    "CoreGraphics",
+    "device",
+    "extensions",
+    "GameplayKit",
+    "game controller",
+    "game development",
+    "helper",
+    "image manipulation",
+    "logger",
+    "network",
+    "Observation",
+    "observable object",
+    "OSLog",
+    "PhotoKit",
+    "state machine",
+    "swift",
+    "ThatFactory",
+    "thumbnail",
+    "toolbox",
+    "unified logging",
+    "util",
+    "websocket"
+  ],
+  "packages": [
     {
-        "name": "ThatFactory",
-        "email": "contact@thatfactory.com"
+      "url": "https://github.com/thatfactory/alma.git"
+    },
+    {
+      "url": "https://github.com/thatfactory/applogger.git"
+    },
+    {
+      "url": "https://github.com/thatfactory/cgkstatemachine.git"
+    },
+    {
+      "url": "https://github.com/thatfactory/cskscene.git"
+    },
+    {
+      "url": "https://github.com/thatfactory/device.git"
+    },
+    {
+      "url": "https://github.com/thatfactory/extensions.git"
+    },
+    {
+      "url": "https://github.com/thatfactory/gcoverseer.git"
+    },
+    {
+      "url": "https://github.com/thatfactory/image-tools.git"
+    },
+    {
+      "url": "https://github.com/thatfactory/observable-websocket-client.git"
+    },
+    {
+      "url": "https://github.com/thatfactory/toolbox.git"
     }
+  ],
+  "author": {
+    "name": "ThatFactory",
+    "email": "contact@thatfactory.com"
+  }
 }
