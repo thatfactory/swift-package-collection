@@ -38,6 +38,9 @@ jobs:
         uses: actions/checkout@v6
         with:
           persist-credentials: true
+          submodules: false
+          clean: true
+          fetch-depth: 0
 
       - name: Clone Swift Package Collection Generator (5.10)
         run: |
