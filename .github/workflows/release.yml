@@ -12,6 +12,11 @@ on:
       source_version:
         required: false
         type: string
+      force_publish:
+        description: "Force regenerate/sign/publish even if collection.json didn't change"
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -58,22 +63,32 @@ jobs:
 
       - name: Detect changes + bump revision
         id: detect
+        env:
+          FORCE_PUBLISH: ${{ inputs.force_publish }}
         run: |
           set -euo pipefail
 
           PREV=".tmp/collection.prev.json"
           NEXT="public/collection.json"
 
-          if cmp -s "$PREV" "$NEXT"; then
-            echo "NO_CHANGES=true" >> "$GITHUB_ENV"
-            echo "no_changes=true" >> "$GITHUB_OUTPUT"
-            echo "No changes in collection.json"
-            exit 0
+          # If manually forced, treat as changed so the pipeline continues.
+          if [ "${FORCE_PUBLISH:-false}" = "true" ]; then
+            echo "NO_CHANGES=false" >> "$GITHUB_ENV"
+            echo "no_changes=false" >> "$GITHUB_OUTPUT"
+            echo "Force publish enabled; continuing even if collection.json is identical."
+          else
+            if cmp -s "$PREV" "$NEXT"; then
+              echo "NO_CHANGES=true" >> "$GITHUB_ENV"
+              echo "no_changes=true" >> "$GITHUB_OUTPUT"
+              echo "No changes in collection.json"
+              exit 0
+            fi
+
+            echo "NO_CHANGES=false" >> "$GITHUB_ENV"
+            echo "no_changes=false" >> "$GITHUB_OUTPUT"
           fi
 
-          echo "NO_CHANGES=false" >> "$GITHUB_ENV"
-          echo "no_changes=false" >> "$GITHUB_OUTPUT"
-
+          # Always bump revision when publishing (real change or forced).
           REV=$(jq -r '.revision // 0' packages.json)
           NEW_REV=$((REV+1))
 
