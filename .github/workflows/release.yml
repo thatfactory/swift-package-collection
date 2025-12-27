@@ -51,6 +51,11 @@ jobs:
           curl -fsSL "https://thatfactory.github.io/swift-package-collection/collection.json" \
             -o .tmp/collection.prev.json || echo '{}' > .tmp/collection.prev.json
 
+      - name: Configure git auth for GitHub clones (incl submodules)
+        run: |
+          set -euo pipefail
+          git config --global url."https://x-access-token:${{ secrets.PACKAGE_COLLECTION_TOKEN }}@github.com/".insteadOf "https://github.com/"
+
       - name: Generate collection.json from packages.json
         run: |
           set -euo pipefail
@@ -298,6 +303,12 @@ jobs:
         with:
           path: ./public
           name: github-pages
+
+      - name: Cleanup git auth rewrite
+        if: always()
+        run: |
+          set -euo pipefail
+          git config --global --unset-all url."https://x-access-token:${{ secrets.PACKAGE_COLLECTION_TOKEN }}@github.com/".insteadOf || true
 
   deploy:
     if: github.ref == 'refs/heads/main' && needs.build.outputs.no_changes != 'true'
