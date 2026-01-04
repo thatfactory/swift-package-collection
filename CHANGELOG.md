@@ -1,3 +1,13 @@
+## 2026-01-04 23:41 UTC — revision 7
+
+### Added
+- **https://github.com/thatfactory/cskscene.git**: `0.1.1`
+- **https://github.com/thatfactory/device.git**: `0.1.1`
+
+### Removed
+- _(none)_
+
+---
 ## 2026-01-04 22:25 UTC — revision 6
 
 ### Added
