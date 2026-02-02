@@ -62,12 +62,26 @@ jobs:
       - name: Generate collection.json from packages.json
         run: |
           set -euo pipefail
-          mkdir -p public
+          mkdir -p public .tmp
 
           cd swift-package-collection-generator
+          LOG="../.tmp/collection.generate.log"
           swift run -c release package-collection-generate \
             ../packages.json ../public/collection.json \
-            --auth-token github:github.com:${{ secrets.PACKAGE_COLLECTION_TOKEN }}
+            --auth-token github:github.com:${{ secrets.PACKAGE_COLLECTION_TOKEN }} \
+            2>&1 | tee "$LOG"
+
+          if grep -E -n "Failed to fetch additional metadata:|Failed to generate metadata|invalidAuthToken" "$LOG"; then
+            echo "Generator reported metadata errors; failing."
+            exit 1
+          fi
+
+          EXPECTED=$(jq '.packages | length' ../packages.json)
+          ACTUAL=$(jq '.packages | length' ../public/collection.json)
+          if [ "$ACTUAL" -ne "$EXPECTED" ]; then
+            echo "Package count mismatch: expected $EXPECTED, got $ACTUAL."
+            exit 1
+          fi
 
       - name: Detect changes + bump revision
         id: detect
@@ -111,9 +125,23 @@ jobs:
         run: |
           set -euo pipefail
           cd swift-package-collection-generator
+          LOG="../.tmp/collection.regenerate.log"
           swift run -c release package-collection-generate \
             ../packages.json ../public/collection.json \
-            --auth-token github:github.com:${{ secrets.PACKAGE_COLLECTION_TOKEN }}
+            --auth-token github:github.com:${{ secrets.PACKAGE_COLLECTION_TOKEN }} \
+            2>&1 | tee "$LOG"
+
+          if grep -E -n "Failed to fetch additional metadata:|Failed to generate metadata|invalidAuthToken" "$LOG"; then
+            echo "Generator reported metadata errors; failing."
+            exit 1
+          fi
+
+          EXPECTED=$(jq '.packages | length' ../packages.json)
+          ACTUAL=$(jq '.packages | length' ../public/collection.json)
+          if [ "$ACTUAL" -ne "$EXPECTED" ]; then
+            echo "Package count mismatch: expected $EXPECTED, got $ACTUAL."
+            exit 1
+          fi
 
       - name: Generate CHANGELOG entry
         if: env.NO_CHANGES != 'true'
