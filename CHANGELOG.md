@@ -1,3 +1,12 @@
+## 2026-02-02 12:59 UTC — revision 8
+
+### Added
+- **https://github.com/thatfactory/extensions.git**: `0.2.0`
+
+### Removed
+- **https://github.com/thatfactory/image-tools.git**: `0.1.0`
+
+---
 ## 2026-01-04 23:41 UTC — revision 7
 
 ### Added
