@@ -1,3 +1,12 @@
+## 2026-02-02 13:54 UTC — revision 10
+
+### Added
+- **https://github.com/thatfactory/image-tools.git**: `0.1.0`
+
+### Removed
+- _(none)_
+
+---
 ## 2026-02-02 13:27 UTC — revision 9
 
 ### Added
