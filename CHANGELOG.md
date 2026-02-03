@@ -1,3 +1,12 @@
+## 2026-02-03 01:24 UTC — revision 11
+
+### Added
+- **https://github.com/thatfactory/extensions.git**: `0.2.1`
+
+### Removed
+- _(none)_
+
+---
 ## 2026-02-02 13:54 UTC — revision 10
 
 ### Added
