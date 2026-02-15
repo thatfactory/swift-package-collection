@@ -12,26 +12,36 @@
     "Combine",
     "CoreGraphics",
     "device",
+    "domain logic",
+    "education",
     "extensions",
     "GameplayKit",
     "game controller",
     "game development",
+    "gamification",
     "helper",
     "image manipulation",
+    "language",
+    "learning",
+    "listening",
     "logger",
     "network",
     "Observation",
     "observable object",
     "OSLog",
     "PhotoKit",
+    "reading",
+    "speaking",
     "state machine",
     "swift",
     "ThatFactory",
     "thumbnail",
     "toolbox",
+    "ui agnostic",
     "unified logging",
     "util",
-    "websocket"
+    "websocket",
+    "writing"
   ],
   "packages": [
     {
@@ -57,6 +67,9 @@
     },
     {
       "url": "https://github.com/thatfactory/image-tools.git"
+    },
+    {
+      "url": "https://github.com/thatfactory/lingokit.git"
     },
     {
       "url": "https://github.com/thatfactory/observable-websocket-client.git"
