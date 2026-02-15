@@ -1,3 +1,13 @@
+## 2026-02-15 23:30 UTC — revision 14
+_Triggered by_ `thatfactory/image-tools` `0.1.1`
+
+### Added
+- **https://github.com/thatfactory/image-tools.git**: `0.1.1`
+
+### Removed
+- _(none)_
+
+---
 ## 2026-02-15 23:25 UTC — revision 13
 
 ### Added
