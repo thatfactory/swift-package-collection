@@ -1,5 +1,5 @@
 ## 2026-02-16 13:15 UTC — revision 18
-_Triggered by_ `thatfactory/observable-websocket-client` `0.2.0`
+_Triggered by_ `thatfactory/observable-websocket` `0.2.0`
 
 ### Added
 - _(none)_
@@ -11,7 +11,7 @@ _Triggered by_ `thatfactory/observable-websocket-client` `0.2.0`
 ## 2026-02-16 13:12 UTC — revision 17
 
 ### Added
-- **https://github.com/thatfactory/observable-websocket-client.git**: `0.2.0`
+- **https://github.com/thatfactory/observable-websocket.git**: `0.2.0`
 
 ### Removed
 - _(none)_
