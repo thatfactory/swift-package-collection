@@ -1,3 +1,12 @@
+## 2026-02-16 13:12 UTC — revision 17
+
+### Added
+- **https://github.com/thatfactory/observable-websocket-client.git**: `0.2.0`
+
+### Removed
+- _(none)_
+
+---
 ## 2026-02-16 12:50 UTC — revision 16
 
 ### Added
