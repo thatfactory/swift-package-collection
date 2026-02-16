@@ -1,3 +1,13 @@
+## 2026-02-16 12:11 UTC — revision 15
+_Triggered by_ `thatfactory/extensions` `0.3.0`
+
+### Added
+- **https://github.com/thatfactory/extensions.git**: `0.3.0`
+
+### Removed
+- **https://github.com/thatfactory/extensions.git**: `0.1.0`
+
+---
 ## 2026-02-15 23:30 UTC — revision 14
 _Triggered by_ `thatfactory/image-tools` `0.1.1`
 
