@@ -18,7 +18,7 @@ A collection of Swift Packages by ThatFactory.
 - 🎮 [GCOverseer](https://github.com/thatfactory/gcoverseer): Observe and manage game controllers using `Combine`.  
 - 🌅 [ImageTools](https://github.com/thatfactory/image-tools): Multiplatform `PhotoKit`/`Core Graphics` wrapper.  
 - 📚 [LingoKit](https://github.com/thatfactory/lingokit): A plug-and-play, UI-agnostic Swift toolkit for building and scoring language-learning exercises.  
-- ⚡ [ObservableWebSocket](https://github.com/thatfactory/observable-websocket-client): Establishes `WebSocket` connections, publishes received messages/errors.   
+- ⚡ [ObservableWebSocket](https://github.com/thatfactory/observable-websocket): Establishes `WebSocket` connections, publishes received messages/errors.   
 - 🧰 [Toolbox](https://github.com/thatfactory/toolbox): A collection of useful Swift tools.
 
 # Integration
