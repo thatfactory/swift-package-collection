@@ -313,7 +313,7 @@ jobs:
           cat > public/badges/revision.json <<EOF
           {
             "schemaVersion": 1,
-            "label": "revision",
+            "label": "Revision",
             "message": "${REV}",
             "color": "blue"
           }
@@ -322,7 +322,7 @@ jobs:
           cat > public/badges/updated.json <<EOF
           {
             "schemaVersion": 1,
-            "label": "updated",
+            "label": "Updated",
             "message": "${UPDATED}",
             "color": "blue"
           }
