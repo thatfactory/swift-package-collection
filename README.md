@@ -1,8 +1,8 @@
 [![Swift](https://img.shields.io/badge/Swift-ea7a50.svg?logo=swift&logoColor=white)](https://developer.apple.com/swift/)
 [![Xcode](https://img.shields.io/badge/Xcode-50ace8.svg?logo=xcode&logoColor=white)](https://developer.apple.com/xcode/)
 [![SPM](https://img.shields.io/badge/SPM-b68f6a.svg?logo=gitlfs&logoColor=white)](https://developer.apple.com/documentation/xcode/swift-packages)
-[![Revision](https://img.shields.io/endpoint?url=https://thatfactory.github.io/swift-package-collection/badges/revision.json&logo=gitbook&logoColor=white)](https://github.com/thatfactory/swift-package-collection/blob/main/CHANGELOG.md)
 [![Updated](https://img.shields.io/endpoint?url=https://thatfactory.github.io/swift-package-collection/badges/updated.json&logo=convertio&logoColor=white)](https://github.com/thatfactory/swift-package-collection/commits/main/)
+[![Revision](https://img.shields.io/endpoint?url=https://thatfactory.github.io/swift-package-collection/badges/revision.json&logo=gitbook&logoColor=white)](https://github.com/thatfactory/swift-package-collection/blob/main/CHANGELOG.md)  
 [![Publish](https://github.com/thatfactory/swift-package-collection/actions/workflows/publish.yml/badge.svg)](https://github.com/thatfactory/swift-package-collection/actions/workflows/publish.yml)
 
 # Swift Package Collection 📦
