@@ -1,7 +1,7 @@
 [![swift](https://img.shields.io/badge/swift-ea7a50.svg?logo=swift&logoColor=white)](https://developer.apple.com/swift/)
 [![xcode](https://img.shields.io/badge/xcode-50ace8.svg?logo=xcode&logoColor=white)](https://developer.apple.com/xcode/)
 [![spm](https://img.shields.io/badge/spm-b68f6a.svg?logo=gitlfs&logoColor=white)](https://developer.apple.com/documentation/xcode/swift-packages)
-[![release](https://github.com/thatfactory/swift-package-collection/actions/workflows/release.yml/badge.svg)](https://github.com/thatfactory/swift-package-collection/actions/workflows/release.yml)
+[![publish](https://github.com/thatfactory/swift-package-collection/actions/workflows/publish.yml/badge.svg)](https://github.com/thatfactory/swift-package-collection/actions/workflows/publish.yml)
 [![revision](https://img.shields.io/endpoint?url=https://thatfactory.github.io/swift-package-collection/badges/revision.json&logo=gitbook&logoColor=white)](https://github.com/thatfactory/swift-package-collection/blob/main/CHANGELOG.md)
 [![updated](https://img.shields.io/endpoint?url=https://thatfactory.github.io/swift-package-collection/badges/updated.json&logo=convertio&logoColor=white)](https://github.com/thatfactory/swift-package-collection/commits/main/)
 
