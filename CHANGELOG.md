@@ -1,3 +1,13 @@
+## 2026-03-04 10:16 UTC — revision 31
+_Triggered by_ `thatfactory/lingokit` `0.6.0`
+
+### Added
+- **https://github.com/thatfactory/lingokit.git**: `0.6.0`
+
+### Removed
+- **https://github.com/thatfactory/lingokit.git**: `0.3.0`
+
+---
 ## 2026-03-02 09:16 UTC — revision 30
 _Triggered by_ `thatfactory/lingokit` `0.5.0`
 
