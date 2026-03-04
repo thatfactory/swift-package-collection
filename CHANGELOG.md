@@ -1,3 +1,13 @@
+## 2026-03-04 16:25 UTC — revision 34
+_Triggered by_ `thatfactory/device` `0.2.1`
+
+### Added
+- **https://github.com/thatfactory/device.git**: `0.2.1`, `0.2.2`
+
+### Removed
+- **https://github.com/thatfactory/device.git**: `0.1.0`, `0.1.1`
+
+---
 ## 2026-03-04 13:46 UTC — revision 33
 _Triggered by_ `thatfactory/alma` `0.1.1`
 
