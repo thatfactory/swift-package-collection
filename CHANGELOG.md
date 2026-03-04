@@ -1,3 +1,13 @@
+## 2026-03-04 16:33 UTC — revision 35
+_Triggered by_ `thatfactory/alma` `0.1.2`
+
+### Added
+- **https://github.com/thatfactory/alma.git**: `0.1.2`
+
+### Removed
+- _(none)_
+
+---
 ## 2026-03-04 16:25 UTC — revision 34
 _Triggered by_ `thatfactory/device` `0.2.1`
 
