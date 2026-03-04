@@ -1,3 +1,14 @@
+## 2026-03-04 13:40 UTC — revision 32
+_Triggered by_ `thatfactory/device` `0.2.0`
+
+### Added
+- **https://github.com/thatfactory/alma.git**: `0.1.1`
+- **https://github.com/thatfactory/device.git**: `0.2.0`
+
+### Removed
+- _(none)_
+
+---
 ## 2026-03-04 10:16 UTC — revision 31
 _Triggered by_ `thatfactory/lingokit` `0.6.0`
 
