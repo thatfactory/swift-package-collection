@@ -1,3 +1,12 @@
+## 2026-04-07 21:37 UTC — revision 41
+
+### Added
+- **https://github.com/thatfactory/progressionkit.git**: `0.1.0`
+
+### Removed
+- **https://github.com/thatfactory/progresskit.git**: `0.1.0`
+
+---
 ## 2026-04-07 21:23 UTC — revision 40
 
 ### Added
