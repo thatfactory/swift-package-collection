@@ -178,10 +178,6 @@ jobs:
           from datetime import datetime, timezone
           import os
 
-          excluded_urls = {
-            "https://github.com/thatfactory/alma.git",
-          }
-
           def read_pairs(path):
             d = defaultdict(list)
             if not os.path.exists(path):
@@ -192,8 +188,6 @@ jobs:
                 if not line:
                   continue
                 url, ver = line.split(" ", 1)
-                if url in excluded_urls:
-                  continue
                 d[url].append(ver)
             for k in d:
               d[k] = sorted(set(d[k]))
