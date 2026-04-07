@@ -46,9 +46,6 @@
   ],
   "packages": [
     {
-      "url": "https://github.com/thatfactory/alma.git"
-    },
-    {
       "url": "https://github.com/thatfactory/applogger.git"
     },
     {

@@ -11,7 +11,6 @@
 A collection of Swift Packages by ThatFactory.
 
 # Packages
-- 👾 [ALMA](https://github.com/thatfactory/alma): Game Engine for the Apple ecosystem.  
 - 📒 [AppLogger](https://github.com/thatfactory/applogger): Wrapper around Apple's Swift logging APIs.  
 - 🔀 [CGKStateMachine](https://github.com/thatfactory/cgkstatemachine): Allows `GKState` changes to be observed via `Combine`.  
 - 🌃 [CSKScene](https://github.com/thatfactory/cskscene): Custom `SKScene` with debugging features and game controller observing capabilities.  

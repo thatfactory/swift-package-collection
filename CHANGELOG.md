@@ -8,24 +8,13 @@ _Triggered by_ `thatfactory/progresskit` `0.1.0`
 - _(none)_
 
 ---
-## 2026-04-07 10:59 UTC — revision 38
-_Triggered by_ `thatfactory/alma` `0.1.3`
-
-### Added
-- _(none)_
-
-### Removed
-- _(none)_
-
----
 ## 2026-04-07 10:53 UTC — revision 37
 
 ### Added
-- **https://github.com/thatfactory/alma.git**: `0.1.3`
 - **https://github.com/thatfactory/progresskit.git**: `0.1.0`
 
 ### Removed
-- **https://github.com/thatfactory/alma.git**: `0.1.0`
+- _(none)_
 
 ---
 ## 2026-03-04 16:50 UTC — revision 36
@@ -33,16 +22,6 @@ _Triggered by_ `thatfactory/device` `0.2.2`
 
 ### Added
 - _(none)_
-
-### Removed
-- _(none)_
-
----
-## 2026-03-04 16:33 UTC — revision 35
-_Triggered by_ `thatfactory/alma` `0.1.2`
-
-### Added
-- **https://github.com/thatfactory/alma.git**: `0.1.2`
 
 ### Removed
 - _(none)_
@@ -58,21 +37,10 @@ _Triggered by_ `thatfactory/device` `0.2.1`
 - **https://github.com/thatfactory/device.git**: `0.1.0`, `0.1.1`
 
 ---
-## 2026-03-04 13:46 UTC — revision 33
-_Triggered by_ `thatfactory/alma` `0.1.1`
-
-### Added
-- _(none)_
-
-### Removed
-- _(none)_
-
----
 ## 2026-03-04 13:40 UTC — revision 32
 _Triggered by_ `thatfactory/device` `0.2.0`
 
 ### Added
-- **https://github.com/thatfactory/alma.git**: `0.1.1`
 - **https://github.com/thatfactory/device.git**: `0.2.0`
 
 ### Removed
