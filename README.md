@@ -21,6 +21,7 @@ A collection of Swift Packages by ThatFactory.
 - 🌅 [ImageTools](https://github.com/thatfactory/image-tools): Multiplatform `PhotoKit`/`Core Graphics` wrapper.  
 - 📚 [LingoKit](https://github.com/thatfactory/lingokit): A plug-and-play, UI-agnostic Swift toolkit for building and scoring language-learning exercises.  
 - ⚡ [ObservableWebSocket](https://github.com/thatfactory/observable-websocket): Establishes `WebSocket` connections, publishes received messages/errors.   
+- 📈 [ProgressionKit](https://github.com/thatfactory/progresskit): A reusable progression engine that turns player performance into configurable XP, levels, and unlocks across games and apps.  
 - 🧰 [Toolbox](https://github.com/thatfactory/toolbox): A collection of useful Swift tools.
 
 # Integration

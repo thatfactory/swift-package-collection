@@ -30,6 +30,7 @@
     "observable object",
     "OSLog",
     "PhotoKit",
+    "progression",
     "reading",
     "speaking",
     "state machine",
@@ -73,6 +74,9 @@
     },
     {
       "url": "https://github.com/thatfactory/observable-websocket.git"
+    },
+    {
+      "url": "https://github.com/thatfactory/progresskit.git"
     },
     {
       "url": "https://github.com/thatfactory/toolbox.git"
