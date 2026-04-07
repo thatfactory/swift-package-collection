@@ -1,3 +1,13 @@
+## 2026-04-07 10:53 UTC — revision 37
+
+### Added
+- **https://github.com/thatfactory/alma.git**: `0.1.3`
+- **https://github.com/thatfactory/progresskit.git**: `0.1.0`
+
+### Removed
+- **https://github.com/thatfactory/alma.git**: `0.1.0`
+
+---
 ## 2026-03-04 16:50 UTC — revision 36
 _Triggered by_ `thatfactory/device` `0.2.2`
 
