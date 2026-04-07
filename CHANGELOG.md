@@ -1,3 +1,12 @@
+## 2026-04-07 21:23 UTC — revision 40
+
+### Added
+- _(none)_
+
+### Removed
+- **https://github.com/thatfactory/alma.git**: `0.1.1`, `0.1.2`, `0.1.3`
+
+---
 ## 2026-04-07 11:37 UTC — revision 39
 _Triggered by_ `thatfactory/progresskit` `0.1.0`
 
