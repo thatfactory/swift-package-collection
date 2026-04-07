@@ -8,7 +8,7 @@
 
 ---
 ## 2026-04-07 11:37 UTC — revision 39
-_Triggered by_ `thatfactory/progresskit` `0.1.0`
+_Triggered by_ `thatfactory/progressionkit` `0.1.0`
 
 ### Added
 - _(none)_
@@ -20,7 +20,7 @@ _Triggered by_ `thatfactory/progresskit` `0.1.0`
 ## 2026-04-07 10:53 UTC — revision 37
 
 ### Added
-- **https://github.com/thatfactory/progresskit.git**: `0.1.0`
+- **https://github.com/thatfactory/progressionkit.git**: `0.1.0`
 
 ### Removed
 - _(none)_
