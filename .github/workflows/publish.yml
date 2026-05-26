@@ -258,41 +258,17 @@ jobs:
           owner: ${{ github.repository_owner }}
           repositories: swift-package-collection
 
-      - name: Configure GPG signing for bot commits
-        if: env.NO_CHANGES != 'true'
-        env:
-          BOT_GPG_PRIVATE_KEY: ${{ secrets.BOT_GPG_PRIVATE_KEY }}
-          BOT_GPG_KEY_ID: ${{ secrets.BOT_GPG_KEY_ID }}
-          BOT_GPG_PASSPHRASE: ${{ secrets.BOT_GPG_PASSPHRASE }}
-        run: |
-          set -euo pipefail
-
-          mkdir -p .tmp
-          chmod 700 "${HOME}/.gnupg"
-          printf '%s\n' "${BOT_GPG_PRIVATE_KEY}" > .tmp/bot-signing-key.asc
-          gpg --batch --import .tmp/bot-signing-key.asc
-
-          cat > .tmp/gpg-wrapper.sh <<'EOF'
-          #!/usr/bin/env bash
-          exec gpg --batch --yes --pinentry-mode loopback --passphrase "${BOT_GPG_PASSPHRASE}" "$@"
-          EOF
-          chmod +x .tmp/gpg-wrapper.sh
-
-          git config user.name "thatfactory-bot"
-          git config user.email "thatfactory-bot@users.noreply.github.com"
-          git config user.signingkey "${BOT_GPG_KEY_ID}"
-          git config commit.gpgsign true
-          git config gpg.program "$(pwd)/.tmp/gpg-wrapper.sh"
-
       - name: Commit revision bump + changelog
         if: env.NO_CHANGES != 'true'
         env:
           APP_TOKEN: ${{ steps.app-token.outputs.token }}
           SOURCE_REPO: ${{ inputs.source_repo }}
           SOURCE_VERSION: ${{ inputs.source_version }}
-          BOT_GPG_PASSPHRASE: ${{ secrets.BOT_GPG_PASSPHRASE }}
         run: |
           set -euo pipefail
+
+          git config user.name "thatfactory-automation-bot[bot]"
+          git config user.email "thatfactory-automation-bot[bot]@users.noreply.github.com"
 
           git add packages.json CHANGELOG.md
           if git diff --cached --quiet; then
@@ -305,20 +281,10 @@ jobs:
             commit_message="${commit_message} — ${SOURCE_REPO:-} ${SOURCE_VERSION:-}"
           fi
 
-          git commit -S -m "${commit_message}"
+          git commit -m "${commit_message}"
           git config --local --unset-all http.https://github.com/.extraheader || true
           git remote set-url origin "https://x-access-token:${APP_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git push origin HEAD:${GITHUB_REF_NAME}
-
-      - name: Cleanup GPG key material
-        if: always()
-        env:
-          BOT_GPG_KEY_ID: ${{ secrets.BOT_GPG_KEY_ID }}
-        run: |
-          set -euo pipefail
-          rm -f .tmp/bot-signing-key.asc .tmp/gpg-wrapper.sh
-          gpg --batch --yes --delete-secret-keys "${BOT_GPG_KEY_ID}" >/dev/null 2>&1 || true
-          gpg --batch --yes --delete-keys "${BOT_GPG_KEY_ID}" >/dev/null 2>&1 || true
 
       - name: Sign collection.json
         if: env.NO_CHANGES != 'true'
