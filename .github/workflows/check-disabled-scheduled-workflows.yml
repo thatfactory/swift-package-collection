@@ -1,0 +1,185 @@
+name: Check Disabled Scheduled Workflows
+
+on:
+  schedule:
+    - cron: "0 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  check-disabled-workflows:
+    runs-on: [self-hosted, macOS]
+    env:
+      ORG_NAME: thatfactory
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      GH_TOKEN_VAR: ${{ vars.GH_TOKEN }}
+      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      SLACK_BOT_TOKEN_VAR: ${{ vars.SLACK_BOT_TOKEN }}
+      SLACK_CHANNEL_ID: ${{ vars.SLACK_CHANNEL_ID }}
+    steps:
+      - name: Validate credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [[ -z "${GH_TOKEN:-}" ]]; then
+            export GH_TOKEN="${GH_TOKEN_VAR:-}"
+          fi
+
+          if [[ -z "${GH_TOKEN:-}" ]]; then
+            echo "GH_TOKEN is not set in either secrets or org variables."
+            exit 1
+          fi
+
+      - name: Scan org for disabled scheduled workflows
+        id: scan
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          repos_json=$(gh repo list "$ORG_NAME" --limit 1000 --json nameWithOwner,isArchived,url)
+          repo_lines=$(jq -r '.[] | select(.isArchived == false) | @base64' <<<"$repos_json")
+
+          matches_json='[]'
+          repositories_scanned=0
+
+          is_scheduled_workflow() {
+            local owner_repo="$1"
+            local workflow_path="$2"
+
+            local content_json
+            if ! content_json=$(gh api "repos/${owner_repo}/contents/${workflow_path}" 2>/dev/null); then
+              return 1
+            fi
+
+            local encoded_content
+            encoded_content=$(jq -r '.content // empty' <<<"$content_json")
+            if [[ -z "$encoded_content" ]]; then
+              return 1
+            fi
+
+            local decoded_content
+            if ! decoded_content=$(printf '%s' "$encoded_content" | tr -d '\n' | base64 --decode 2>/dev/null); then
+              return 1
+            fi
+
+            if printf '%s\n' "$decoded_content" | grep -Eq '^[[:space:]]*on:[[:space:]]*\[[^]]*schedule[^]]*\]'; then
+              return 0
+            fi
+
+            if printf '%s\n' "$decoded_content" | grep -Eq '^[[:space:]]*schedule:[[:space:]]*$'; then
+              return 0
+            fi
+
+            return 1
+          }
+
+          while IFS= read -r repo_b64; do
+            [[ -n "$repo_b64" ]] || continue
+
+            repo_obj=$(printf '%s' "$repo_b64" | base64 --decode)
+            repo_full_name=$(jq -r '.nameWithOwner' <<<"$repo_obj")
+            repo_url=$(jq -r '.url' <<<"$repo_obj")
+
+            repositories_scanned=$((repositories_scanned + 1))
+
+            workflows_json=$(gh workflow list --repo "$repo_full_name" --all --json name,path,state,id 2>/dev/null || true)
+            if [[ -z "$workflows_json" ]]; then
+              continue
+            fi
+
+            disabled_workflow_lines=$(jq -r '.[] | select(.state != "active") | @base64' <<<"$workflows_json")
+            [[ -n "$disabled_workflow_lines" ]] || continue
+
+            while IFS= read -r workflow_b64; do
+              [[ -n "$workflow_b64" ]] || continue
+
+              workflow_obj=$(printf '%s' "$workflow_b64" | base64 --decode)
+              workflow_name=$(jq -r '.name' <<<"$workflow_obj")
+              workflow_path=$(jq -r '.path' <<<"$workflow_obj")
+              workflow_state=$(jq -r '.state' <<<"$workflow_obj")
+
+              if ! is_scheduled_workflow "$repo_full_name" "$workflow_path"; then
+                continue
+              fi
+
+              workflow_file_name=$(basename "$workflow_path")
+              workflow_url="${repo_url}/actions/workflows/${workflow_file_name}"
+
+              match_obj=$(jq -n \
+                --arg repo "$repo_full_name" \
+                --arg repoUrl "$repo_url" \
+                --arg workflowName "$workflow_name" \
+                --arg workflowPath "$workflow_path" \
+                --arg workflowState "$workflow_state" \
+                --arg workflowUrl "$workflow_url" \
+                '{repo: $repo, repoUrl: $repoUrl, workflow: {name: $workflowName, path: $workflowPath, state: $workflowState, url: $workflowUrl}}')
+
+              matches_json=$(jq --argjson item "$match_obj" '. + [$item]' <<<"$matches_json")
+            done <<<"$disabled_workflow_lines"
+          done <<<"$repo_lines"
+
+          match_count=$(jq 'length' <<<"$matches_json")
+
+          {
+            echo "repositories_scanned=$repositories_scanned"
+            echo "match_count=$match_count"
+          } >> "$GITHUB_OUTPUT"
+
+          jq -n \
+            --arg org "$ORG_NAME" \
+            --argjson repositoriesScanned "$repositories_scanned" \
+            --argjson matches "$matches_json" \
+            '{org: $org, generatedAt: now|todateiso8601, repositoriesScanned: $repositoriesScanned, matches: $matches}' > results.json
+
+          if [[ "$match_count" -gt 0 ]]; then
+            echo "Disabled scheduled workflows found: $match_count"
+            jq -r '.matches[] | "- \(.repo): \(.workflow.name) [\(.workflow.state)] (\(.workflow.url))"' results.json
+            exit 1
+          fi
+
+          echo "No disabled scheduled workflows found."
+
+      - name: Upload scan result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: disabled-scheduled-workflows-result
+          path: results.json
+
+      - name: Notify Slack on failure
+        if: failure()
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [[ -z "${SLACK_BOT_TOKEN:-}" ]]; then
+            export SLACK_BOT_TOKEN="${SLACK_BOT_TOKEN_VAR:-}"
+          fi
+
+          if [[ -z "${SLACK_BOT_TOKEN:-}" || -z "${SLACK_CHANNEL_ID:-}" ]]; then
+            echo "Slack variables are not configured. Skipping Slack notification."
+            exit 0
+          fi
+
+          run_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          match_count="${{ steps.scan.outputs.match_count || 'unknown' }}"
+
+          payload=$(jq -n \
+            --arg channel "$SLACK_CHANNEL_ID" \
+            --arg text "Disabled scheduled workflow check failed for ${ORG_NAME}. Matches: ${match_count}. Run: ${run_url}" \
+            '{channel: $channel, text: $text}')
+
+          curl -sS -X POST "https://slack.com/api/chat.postMessage" \
+            -H "Authorization: Bearer ${SLACK_BOT_TOKEN}" \
+            -H "Content-Type: application/json; charset=utf-8" \
+            --data "$payload" >/tmp/slack-response.json
+
+          if [[ "$(jq -r '.ok' /tmp/slack-response.json)" != "true" ]]; then
+            echo "Slack API error:"
+            cat /tmp/slack-response.json
+            exit 1
+          fi
