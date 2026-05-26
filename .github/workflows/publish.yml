@@ -4,6 +4,9 @@ name: Publish
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - CHANGELOG.md
+      - packages.json
   workflow_dispatch:
     inputs:
       source_repo:
