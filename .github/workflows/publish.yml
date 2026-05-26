@@ -245,16 +245,42 @@ jobs:
           cat .tmp/CHANGELOG_ENTRY.md CHANGELOG.md > .tmp/CHANGELOG_NEW.md
           mv .tmp/CHANGELOG_NEW.md CHANGELOG.md
 
+      - name: Create GitHub App token
+        if: env.NO_CHANGES != 'true'
+        id: app-token
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: ${{ secrets.APP_CLIENT_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+          repositories: swift-package-collection
+
       - name: Commit revision bump + changelog
         if: env.NO_CHANGES != 'true'
-        uses: iarekylew00t/verified-bot-commit@v2
-        with:
-          message: >
-            Update collection (rev ${{ env.NEW_REV }})
-            ${{ inputs.source_repo && format('— {0} {1}', inputs.source_repo, inputs.source_version) || '' }}
-          files: |
-            packages.json
-            CHANGELOG.md
+        env:
+          APP_TOKEN: ${{ steps.app-token.outputs.token }}
+          SOURCE_REPO: ${{ inputs.source_repo }}
+          SOURCE_VERSION: ${{ inputs.source_version }}
+        run: |
+          set -euo pipefail
+
+          git config user.name "thatfactory-automation-bot[bot]"
+          git config user.email "thatfactory-automation-bot[bot]@users.noreply.github.com"
+
+          git add packages.json CHANGELOG.md
+          if git diff --cached --quiet; then
+            echo "No staged changes to commit."
+            exit 0
+          fi
+
+          commit_message="Update collection (rev ${NEW_REV})"
+          if [[ -n "${SOURCE_REPO:-}" || -n "${SOURCE_VERSION:-}" ]]; then
+            commit_message="${commit_message} — ${SOURCE_REPO:-} ${SOURCE_VERSION:-}"
+          fi
+
+          git commit -m "${commit_message}"
+          git remote set-url origin "https://x-access-token:${APP_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git push origin HEAD:${GITHUB_REF_NAME}
 
       - name: Sign collection.json
         if: env.NO_CHANGES != 'true'
