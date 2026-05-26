@@ -15,9 +15,7 @@ jobs:
     env:
       ORG_NAME: thatfactory
       GH_TOKEN: ${{ secrets.GH_TOKEN }}
-      GH_TOKEN_VAR: ${{ vars.GH_TOKEN }}
       SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-      SLACK_BOT_TOKEN_VAR: ${{ vars.SLACK_BOT_TOKEN }}
       SLACK_CHANNEL_ID: ${{ vars.SLACK_CHANNEL_ID }}
     steps:
       - name: Validate credentials
@@ -26,11 +24,7 @@ jobs:
           set -euo pipefail
 
           if [[ -z "${GH_TOKEN:-}" ]]; then
-            export GH_TOKEN="${GH_TOKEN_VAR:-}"
-          fi
-
-          if [[ -z "${GH_TOKEN:-}" ]]; then
-            echo "GH_TOKEN is not set in either secrets or org variables."
+            echo "GH_TOKEN secret is not set."
             exit 1
           fi
 
@@ -155,10 +149,6 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-
-          if [[ -z "${SLACK_BOT_TOKEN:-}" ]]; then
-            export SLACK_BOT_TOKEN="${SLACK_BOT_TOKEN_VAR:-}"
-          fi
 
           if [[ -z "${SLACK_BOT_TOKEN:-}" || -z "${SLACK_CHANNEL_ID:-}" ]]; then
             echo "Slack variables are not configured. Skipping Slack notification."
