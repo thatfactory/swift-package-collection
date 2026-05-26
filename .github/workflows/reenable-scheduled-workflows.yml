@@ -1,4 +1,4 @@
-name: Check Disabled Scheduled Workflows
+name: Reenable Scheduled Workflows
 
 on:
   schedule:
@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 jobs:
-  check-disabled-workflows:
+  reenable-scheduled-workflows:
     runs-on: [self-hosted, macOS]
     env:
       ORG_NAME: thatfactory
@@ -28,7 +28,7 @@ jobs:
             exit 1
           fi
 
-      - name: Scan org for disabled scheduled workflows
+      - name: Scan and reenable disabled scheduled workflows
         id: scan
         shell: bash
         run: |
@@ -39,6 +39,8 @@ jobs:
 
           matches_json='[]'
           repositories_scanned=0
+          workflows_enabled=0
+          workflows_enable_failed=0
 
           is_scheduled_workflow() {
             local owner_repo="$1"
@@ -103,6 +105,16 @@ jobs:
               workflow_file_name=$(basename "$workflow_path")
               workflow_url="${repo_url}/actions/workflows/${workflow_file_name}"
 
+              enable_success=false
+              enable_message="failed_to_enable"
+              if gh workflow enable "$workflow_path" --repo "$repo_full_name" >/dev/null 2>&1; then
+                workflows_enabled=$((workflows_enabled + 1))
+                enable_success=true
+                enable_message="enabled"
+              else
+                workflows_enable_failed=$((workflows_enable_failed + 1))
+              fi
+
               match_obj=$(jq -n \
                 --arg repo "$repo_full_name" \
                 --arg repoUrl "$repo_url" \
@@ -110,7 +122,9 @@ jobs:
                 --arg workflowPath "$workflow_path" \
                 --arg workflowState "$workflow_state" \
                 --arg workflowUrl "$workflow_url" \
-                '{repo: $repo, repoUrl: $repoUrl, workflow: {name: $workflowName, path: $workflowPath, state: $workflowState, url: $workflowUrl}}')
+                --argjson enableSuccess "$enable_success" \
+                --arg enableMessage "$enable_message" \
+                '{repo: $repo, repoUrl: $repoUrl, workflow: {name: $workflowName, path: $workflowPath, state: $workflowState, url: $workflowUrl}, enable: {attempted: true, success: $enableSuccess, message: $enableMessage}}')
 
               matches_json=$(jq --argjson item "$match_obj" '. + [$item]' <<<"$matches_json")
             done <<<"$disabled_workflow_lines"
@@ -121,27 +135,32 @@ jobs:
           {
             echo "repositories_scanned=$repositories_scanned"
             echo "match_count=$match_count"
+            echo "workflows_enabled=$workflows_enabled"
+            echo "workflows_enable_failed=$workflows_enable_failed"
           } >> "$GITHUB_OUTPUT"
 
           jq -n \
             --arg org "$ORG_NAME" \
             --argjson repositoriesScanned "$repositories_scanned" \
+            --argjson workflowsEnabled "$workflows_enabled" \
+            --argjson workflowsEnableFailed "$workflows_enable_failed" \
             --argjson matches "$matches_json" \
-            '{org: $org, generatedAt: now|todateiso8601, repositoriesScanned: $repositoriesScanned, matches: $matches}' > results.json
+            '{org: $org, generatedAt: now|todateiso8601, repositoriesScanned: $repositoriesScanned, workflowsEnabled: $workflowsEnabled, workflowsEnableFailed: $workflowsEnableFailed, matches: $matches}' > results.json
 
-          if [[ "$match_count" -gt 0 ]]; then
-            echo "Disabled scheduled workflows found: $match_count"
-            jq -r '.matches[] | "- \(.repo): \(.workflow.name) [\(.workflow.state)] (\(.workflow.url))"' results.json
+          echo "Repositories scanned: $repositories_scanned"
+          echo "Disabled scheduled workflows found: $match_count"
+          echo "Successfully reenabled: $workflows_enabled"
+          echo "Failed to reenable: $workflows_enable_failed"
+
+          if [[ "$workflows_enable_failed" -gt 0 ]]; then
             exit 1
           fi
 
-          echo "No disabled scheduled workflows found."
-
       - name: Upload scan result
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4
         with:
-          name: disabled-scheduled-workflows-result
+          name: reenable-scheduled-workflows-result
           path: results.json
 
       - name: Notify Slack on failure
@@ -156,14 +175,14 @@ jobs:
           fi
 
           run_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
-          match_count="${{ steps.scan.outputs.match_count }}"
-          if [[ -z "${match_count:-}" ]]; then
-            match_count="unknown"
+          failed_count="${{ steps.scan.outputs.workflows_enable_failed }}"
+          if [[ -z "${failed_count:-}" ]]; then
+            failed_count="unknown"
           fi
 
           payload=$(jq -n \
             --arg channel "$SLACK_CHANNEL_ID" \
-            --arg text "Disabled scheduled workflow check failed for ${ORG_NAME}. Matches: ${match_count}. Run: ${run_url}" \
+            --arg text "Reenable Scheduled Workflows failed for ${ORG_NAME}. Failed reenables: ${failed_count}. Run: ${run_url}" \
             '{channel: $channel, text: $text}')
 
           curl -sS -X POST "https://slack.com/api/chat.postMessage" \
