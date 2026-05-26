@@ -166,7 +166,10 @@ jobs:
           fi
 
           run_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
-          match_count="${{ steps.scan.outputs.match_count || 'unknown' }}"
+          match_count="${{ steps.scan.outputs.match_count }}"
+          if [[ -z "${match_count:-}" ]]; then
+            match_count="unknown"
+          fi
 
           payload=$(jq -n \
             --arg channel "$SLACK_CHANNEL_ID" \
