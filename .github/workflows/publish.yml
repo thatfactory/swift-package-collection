@@ -37,7 +37,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v6
         with:
-          persist-credentials: true
+          persist-credentials: false
           submodules: false
           clean: true
           fetch-depth: 0
@@ -279,6 +279,7 @@ jobs:
           fi
 
           git commit -m "${commit_message}"
+          git config --local --unset-all http.https://github.com/.extraheader || true
           git remote set-url origin "https://x-access-token:${APP_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git push origin HEAD:${GITHUB_REF_NAME}
 
