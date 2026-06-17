@@ -1,0 +1,112 @@
+name: Enforce Automatic Branch Deletion
+
+on:
+  schedule:
+    - cron: "0 4 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  enforce-delete-branch-on-merge:
+    runs-on: [self-hosted, macOS]
+    env:
+      ORG_NAME: thatfactory
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
+    steps:
+      - name: Validate credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [[ -z "${GH_TOKEN:-}" ]]; then
+            echo "GH_TOKEN secret is not set."
+            exit 1
+          fi
+
+      - name: Enforce automatic branch deletion
+        id: enforce
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          repos_json=$(gh repo list "$ORG_NAME" --limit 1000 --json nameWithOwner,isArchived,url)
+          repo_lines=$(jq -r '.[] | select(.isArchived == false) | @base64' <<<"$repos_json")
+
+          repositories_scanned=0
+          repositories_already_enabled=0
+          repositories_enabled=0
+          repositories_enable_failed=0
+          changes_json='[]'
+
+          while IFS= read -r repo_b64; do
+            [[ -n "$repo_b64" ]] || continue
+
+            repo_obj=$(printf '%s' "$repo_b64" | base64 --decode)
+            repo_full_name=$(jq -r '.nameWithOwner' <<<"$repo_obj")
+            repo_url=$(jq -r '.url' <<<"$repo_obj")
+
+            repositories_scanned=$((repositories_scanned + 1))
+
+            delete_branch_on_merge=$(gh api "repos/${repo_full_name}" --jq '.delete_branch_on_merge // false')
+            if [[ "$delete_branch_on_merge" == "true" ]]; then
+              repositories_already_enabled=$((repositories_already_enabled + 1))
+              continue
+            fi
+
+            enable_success=false
+            enable_message="failed_to_enable"
+            if gh api -X PATCH "repos/${repo_full_name}" -f delete_branch_on_merge=true >/dev/null; then
+              repositories_enabled=$((repositories_enabled + 1))
+              enable_success=true
+              enable_message="enabled"
+            else
+              repositories_enable_failed=$((repositories_enable_failed + 1))
+            fi
+
+            change_obj=$(jq -n \
+              --arg repo "$repo_full_name" \
+              --arg repoUrl "$repo_url" \
+              --argjson previousValue false \
+              --argjson enableSuccess "$enable_success" \
+              --arg enableMessage "$enable_message" \
+              '{repo: $repo, repoUrl: $repoUrl, previousDeleteBranchOnMerge: $previousValue, enable: {attempted: true, success: $enableSuccess, message: $enableMessage}}')
+
+            changes_json=$(jq --argjson item "$change_obj" '. + [$item]' <<<"$changes_json")
+          done <<<"$repo_lines"
+
+          change_count=$(jq 'length' <<<"$changes_json")
+
+          {
+            echo "repositories_scanned=$repositories_scanned"
+            echo "repositories_already_enabled=$repositories_already_enabled"
+            echo "repositories_enabled=$repositories_enabled"
+            echo "repositories_enable_failed=$repositories_enable_failed"
+            echo "change_count=$change_count"
+          } >> "$GITHUB_OUTPUT"
+
+          jq -n \
+            --arg org "$ORG_NAME" \
+            --argjson repositoriesScanned "$repositories_scanned" \
+            --argjson repositoriesAlreadyEnabled "$repositories_already_enabled" \
+            --argjson repositoriesEnabled "$repositories_enabled" \
+            --argjson repositoriesEnableFailed "$repositories_enable_failed" \
+            --argjson changes "$changes_json" \
+            '{org: $org, generatedAt: now|todateiso8601, repositoriesScanned: $repositoriesScanned, repositoriesAlreadyEnabled: $repositoriesAlreadyEnabled, repositoriesEnabled: $repositoriesEnabled, repositoriesEnableFailed: $repositoriesEnableFailed, changes: $changes}' > results.json
+
+          echo "Repositories scanned: $repositories_scanned"
+          echo "Already enabled: $repositories_already_enabled"
+          echo "Enabled during this run: $repositories_enabled"
+          echo "Failed to enable: $repositories_enable_failed"
+
+          if [[ "$repositories_enable_failed" -gt 0 ]]; then
+            exit 1
+          fi
+
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: enforce-delete-branch-on-merge-results
+          path: results.json
