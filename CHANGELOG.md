@@ -1,3 +1,16 @@
+## 2026-06-17 12:33 UTC — revision 57
+_Triggered by_ `thatfactory/gcoverseer` `0.1.1`
+
+### Added
+- **https://github.com/thatfactory/cgkstatemachine.git**: `0.1.1`
+- **https://github.com/thatfactory/device.git**: `0.2.3`
+- **https://github.com/thatfactory/gcoverseer.git**: `0.1.1`
+- **https://github.com/thatfactory/image-tools.git**: `0.1.2`
+
+### Removed
+- **https://github.com/thatfactory/device.git**: `0.2.0`
+
+---
 ## 2026-06-17 11:46 UTC — revision 56
 _Triggered by_ `thatfactory/applogger` `1.0.0`
 
