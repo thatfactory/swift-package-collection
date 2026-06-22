@@ -1,3 +1,27 @@
+## 2026-06-22 08:46 UTC — revision 61
+_Triggered by_ `thatfactory/lingokit` `0.6.1`
+
+### Added
+- **https://github.com/thatfactory/cgkstatemachine.git**: `0.1.2`
+- **https://github.com/thatfactory/cskscene.git**: `0.1.3`
+- **https://github.com/thatfactory/device.git**: `0.2.4`
+- **https://github.com/thatfactory/extensions.git**: `0.3.1`
+- **https://github.com/thatfactory/gcoverseer.git**: `0.1.2`
+- **https://github.com/thatfactory/image-tools.git**: `0.1.3`
+- **https://github.com/thatfactory/lingokit.git**: `0.6.1`
+- **https://github.com/thatfactory/observable-websocket.git**: `0.2.1`
+- **https://github.com/thatfactory/progressionkit.git**: `0.1.3`
+- **https://github.com/thatfactory/toolbox.git**: `0.1.1`
+
+### Removed
+- **https://github.com/thatfactory/cskscene.git**: `0.1.0`
+- **https://github.com/thatfactory/device.git**: `0.2.1`
+- **https://github.com/thatfactory/extensions.git**: `0.2.0`
+- **https://github.com/thatfactory/image-tools.git**: `0.1.0`
+- **https://github.com/thatfactory/lingokit.git**: `0.4.0`
+- **https://github.com/thatfactory/progressionkit.git**: `0.1.0`
+
+---
 ## 2026-06-18 12:14 UTC — revision 60
 
 ### Added
