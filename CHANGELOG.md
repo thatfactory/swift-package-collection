@@ -1,3 +1,13 @@
+## 2026-07-23 15:13 UTC — revision 67
+_Triggered by_ `thatfactory/lingokit` `0.6.2`
+
+### Added
+- **https://github.com/thatfactory/lingokit.git**: `0.6.2`
+
+### Removed
+- **https://github.com/thatfactory/lingokit.git**: `0.5.0`
+
+---
 ## 2026-07-21 21:52 UTC — revision 66
 _Triggered by_ `thatfactory/applogger` `1.1.0`
 
