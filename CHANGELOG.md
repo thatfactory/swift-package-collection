@@ -1,3 +1,13 @@
+## 2026-08-13 20:34 UTC — revision 70
+_Triggered by_ `thatfactory/progressionkit` `0.1.5`
+
+### Added
+- **https://github.com/thatfactory/progressionkit.git**: `0.1.5`
+
+### Removed
+- **https://github.com/thatfactory/progressionkit.git**: `0.1.2`
+
+---
 ## 2026-08-13 20:19 UTC — revision 69
 _Triggered by_ `thatfactory/lingokit` `0.6.3`
 
