@@ -13,6 +13,7 @@ A collection of Swift Packages by ThatFactory.
 # Packages
 - 📒 [AppLogger](https://github.com/thatfactory/applogger): Wrapper around Apple's Swift logging APIs.  
 - 🔀 [CGKStateMachine](https://github.com/thatfactory/cgkstatemachine): Allows `GKState` changes to be observed via `Combine`.  
+- ☁️ [CloudSaveKit](https://github.com/thatfactory/cloudsavekit): Synchronizes durable local data with CloudKit through `CKSyncEngine`.  
 - 🌃 [CSKScene](https://github.com/thatfactory/cskscene): Custom `SKScene` with debugging features and game controller observing capabilities.  
 - 📱 [Device](https://github.com/thatfactory/device): Retrieves information about the host device.  
 - ⚙️ [Extensions](https://github.com/thatfactory/extensions): A collection of useful Swift/SwiftUI extensions.  
