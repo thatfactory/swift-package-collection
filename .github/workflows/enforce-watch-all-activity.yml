@@ -54,3 +54,18 @@ jobs:
               -F subscribed=true \
               -F ignored=false \
               >/dev/null
+            then
+              repositories_watched=$((repositories_watched + 1))
+            else
+              echo "::error::Failed to watch $repo"
+              repositories_failed=$((repositories_failed + 1))
+            fi
+          done <<< "$repos"
+
+          echo "Repositories scanned: $repositories_scanned"
+          echo "Repositories watched: $repositories_watched"
+          echo "Failures: $repositories_failed"
+
+          if [[ "$repositories_failed" -gt 0 ]]; then
+            exit 1
+          fi
