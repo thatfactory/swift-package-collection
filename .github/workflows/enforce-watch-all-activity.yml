@@ -1,0 +1,56 @@
+name: Enforce Repository Watching
+
+on:
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  enforce-watch-all-activity:
+    runs-on: [self-hosted, macOS]
+    env:
+      ORG_NAME: thatfactory
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
+    steps:
+      - name: Validate credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [[ -z "${GH_TOKEN:-}" ]]; then
+            echo "GH_TOKEN secret is not set."
+            exit 1
+          fi
+
+      - name: Enforce repository watching
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          repos=$(gh repo list "$ORG_NAME" \
+            --limit 1000 \
+            --json nameWithOwner,isArchived \
+            --jq '.[] | select(.isArchived == false) | .nameWithOwner')
+
+          repositories_scanned=0
+          repositories_watched=0
+          repositories_failed=0
+
+          while IFS= read -r repo; do
+            [[ -n "$repo" ]] || continue
+
+            repositories_scanned=$((repositories_scanned + 1))
+
+            echo "Watching $repo..."
+
+            if gh api \
+              --method PUT \
+              "repos/${repo}/subscription" \
+              -H "X-GitHub-Api-Version: 2026-03-10" \
+              -F subscribed=true \
+              -F ignored=false \
+              >/dev/null
