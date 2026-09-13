@@ -1,3 +1,13 @@
+## 2026-09-13 19:50 UTC — revision 80
+_Triggered by_ `thatfactory/cloudsavekit` `0.2.1`
+
+### Added
+- **https://github.com/thatfactory/cloudsavekit.git**: `0.2.1`
+
+### Removed
+- **https://github.com/thatfactory/cloudsavekit.git**: `0.1.0`
+
+---
 ## 2026-09-13 12:27 UTC — revision 79
 _Triggered by_ `thatfactory/cloudsavekit` `0.2.0`
 
