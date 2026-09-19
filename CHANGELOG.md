@@ -1,3 +1,15 @@
+## 2026-09-19 15:31 UTC — revision 89
+_Triggered by_ `thatfactory/observable-websocket` `0.2.2`
+
+### Added
+- **https://github.com/thatfactory/extensions.git**: `0.3.3`
+- **https://github.com/thatfactory/observable-websocket.git**: `0.2.2`
+
+### Removed
+- **https://github.com/thatfactory/extensions.git**: `0.3.0`
+- **https://github.com/thatfactory/observable-websocket.git**: `0.1.0`
+
+---
 ## 2026-09-19 15:15 UTC — revision 88
 _Triggered by_ `thatfactory/lingokit` `0.6.5`
 
