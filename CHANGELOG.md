@@ -1,3 +1,17 @@
+## 2026-09-19 15:04 UTC — revision 87
+_Triggered by_ `thatfactory/device` `0.2.5`
+
+### Added
+- **https://github.com/thatfactory/image-tools.git**: `0.1.4`
+- **https://github.com/thatfactory/progressionkit.git**: `0.1.7`
+- **https://github.com/thatfactory/textcapturekit.git**: `0.1.2`
+- **https://github.com/thatfactory/toolbox.git**: `0.1.2`
+
+### Removed
+- **https://github.com/thatfactory/image-tools.git**: `0.1.1`
+- **https://github.com/thatfactory/progressionkit.git**: `0.1.4`
+
+---
 ## 2026-09-19 14:50 UTC — revision 86
 _Triggered by_ `thatfactory/cloudsavekit` `0.2.6`
 
