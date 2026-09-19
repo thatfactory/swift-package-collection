@@ -17,11 +17,15 @@ A collection of Swift Packages by ThatFactory.
 - 🌃 [CSKScene](https://github.com/thatfactory/cskscene): Custom `SKScene` with debugging features and game controller observing capabilities.  
 - 📱 [Device](https://github.com/thatfactory/device): Retrieves information about the host device.  
 - ⚙️ [Extensions](https://github.com/thatfactory/extensions): A collection of useful Swift/SwiftUI extensions.  
+- 🃏 [FlashcardKit](https://github.com/thatfactory/flashcardkit): Reusable, UI-agnostic models and logic for flashcard-based learning experiences.
 - 🎮 [GCOverseer](https://github.com/thatfactory/gcoverseer): Observe and manage game controllers using `Combine`.  
+- 🎨 [ImagePlaygroundBridge](https://github.com/thatfactory/image-playground-bridge): A reusable Swift integration layer for Apple's system-managed Image Playground experience.
 - 🌅 [ImageTools](https://github.com/thatfactory/image-tools): Multiplatform `PhotoKit`/`Core Graphics` wrapper.  
+- 📖 [LexiconKit](https://github.com/thatfactory/lexiconkit): Models and manages personal vocabulary collections, definitions, and learning metadata.
 - 📚 [LingoKit](https://github.com/thatfactory/lingokit): A plug-and-play, UI-agnostic Swift toolkit for building and scoring language-learning exercises.  
 - ⚡ [ObservableWebSocket](https://github.com/thatfactory/observable-websocket): Establishes `WebSocket` connections, publishes received messages/errors.   
 - 📈 [ProgressionKit](https://github.com/thatfactory/progressionkit): A reusable progression engine that turns player performance into configurable XP, levels, and unlocks across games and apps.  
+- 👁️ [TextCaptureKit](https://github.com/thatfactory/textcapturekit): Recognizes and structures text from images using Apple's Vision framework.
 - 🧰 [Toolbox](https://github.com/thatfactory/toolbox): A collection of useful Swift tools.
 
 # Integration

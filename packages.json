@@ -19,12 +19,14 @@
     "domain logic",
     "education",
     "extensions",
+    "flashcards",
     "GameplayKit",
     "game controller",
     "game development",
     "gamification",
     "helper",
     "image manipulation",
+    "image playground",
     "language",
     "learning",
     "listening",
@@ -32,6 +34,7 @@
     "network",
     "Observation",
     "observable object",
+    "OCR",
     "OSLog",
     "PhotoKit",
     "progression",
@@ -40,11 +43,14 @@
     "state machine",
     "swift",
     "ThatFactory",
+    "text recognition",
     "thumbnail",
     "toolbox",
     "ui agnostic",
     "unified logging",
     "util",
+    "vocabulary",
+    "Vision",
     "websocket",
     "writing"
   ],
@@ -68,10 +74,19 @@
       "url": "https://github.com/thatfactory/extensions.git"
     },
     {
+      "url": "https://github.com/thatfactory/flashcardkit.git"
+    },
+    {
       "url": "https://github.com/thatfactory/gcoverseer.git"
     },
     {
+      "url": "https://github.com/thatfactory/image-playground-bridge.git"
+    },
+    {
       "url": "https://github.com/thatfactory/image-tools.git"
+    },
+    {
+      "url": "https://github.com/thatfactory/lexiconkit.git"
     },
     {
       "url": "https://github.com/thatfactory/lingokit.git"
@@ -81,6 +96,9 @@
     },
     {
       "url": "https://github.com/thatfactory/progressionkit.git"
+    },
+    {
+      "url": "https://github.com/thatfactory/textcapturekit.git"
     },
     {
       "url": "https://github.com/thatfactory/toolbox.git"
