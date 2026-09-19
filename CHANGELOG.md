@@ -1,3 +1,15 @@
+## 2026-09-19 11:33 UTC — revision 85
+
+### Added
+- **https://github.com/thatfactory/flashcardkit.git**: `0.1.0`
+- **https://github.com/thatfactory/image-playground-bridge.git**: `0.1.0`
+- **https://github.com/thatfactory/lexiconkit.git**: `0.1.0`, `0.1.1`
+- **https://github.com/thatfactory/textcapturekit.git**: `0.1.0`, `0.1.1`
+
+### Removed
+- _(none)_
+
+---
 ## 2026-09-14 19:10 UTC — revision 84
 _Triggered by_ `thatfactory/cloudsavekit` `0.2.5`
 
