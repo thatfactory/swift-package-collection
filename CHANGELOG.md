@@ -1,3 +1,13 @@
+## 2026-09-19 15:15 UTC — revision 88
+_Triggered by_ `thatfactory/lingokit` `0.6.5`
+
+### Added
+- **https://github.com/thatfactory/cskscene.git**: `0.1.4`
+
+### Removed
+- **https://github.com/thatfactory/cskscene.git**: `0.1.1`
+
+---
 ## 2026-09-19 15:04 UTC — revision 87
 _Triggered by_ `thatfactory/device` `0.2.5`
 
