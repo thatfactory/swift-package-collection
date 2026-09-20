@@ -1,3 +1,12 @@
+## 2026-09-20 11:55 UTC — revision 92
+
+### Added
+- **https://github.com/thatfactory/intelligence-bridge.git**: `0.2.0`
+
+### Removed
+- _(none)_
+
+---
 ## 2026-09-20 11:24 UTC — revision 91
 
 ### Added
