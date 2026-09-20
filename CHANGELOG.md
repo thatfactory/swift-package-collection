@@ -1,3 +1,12 @@
+## 2026-09-20 11:24 UTC — revision 91
+
+### Added
+- _(none)_
+
+### Removed
+- **https://github.com/thatfactory/image-playground-bridge.git**: `0.1.0`, `0.1.1`
+
+---
 ## 2026-09-19 15:38 UTC — revision 90
 _Triggered by_ `thatfactory/extensions` `0.3.3`
 
