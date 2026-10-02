@@ -1,0 +1,22 @@
+name: Validate signing safeguards
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+    paths:
+      - Scripts/**
+      - Tests/**
+      - .github/workflows/validate-signing.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Test signing safeguards without production credentials
+        run: python3 -m unittest discover -s Tests -v
