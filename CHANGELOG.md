@@ -1,3 +1,13 @@
+## 2026-10-02 08:29 UTC — revision 93
+
+### Added
+- **https://github.com/thatfactory/flashcardkit.git**: `0.2.0`
+- **https://github.com/thatfactory/lexiconkit.git**: `0.2.0`, `0.3.0`
+
+### Removed
+- **https://github.com/thatfactory/lexiconkit.git**: `0.1.0`, `0.1.1`
+
+---
 ## 2026-09-20 11:55 UTC — revision 92
 
 ### Added
