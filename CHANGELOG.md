@@ -1,3 +1,12 @@
+## 2026-11-04 18:38 UTC — revision 96
+
+### Added
+- **https://github.com/thatfactory/iiifresolver.git**: `0.1.0`
+
+### Removed
+- _(none)_
+
+---
 ## 2026-10-29 11:10 UTC — revision 95
 _Triggered by_ `thatfactory/cloudsavekit` `0.3.1`
 
