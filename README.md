@@ -19,6 +19,7 @@ A collection of Swift Packages by ThatFactory.
 - ⚙️ [Extensions](https://github.com/thatfactory/extensions): A collection of useful Swift/SwiftUI extensions.  
 - 🃏 [FlashcardKit](https://github.com/thatfactory/flashcardkit): Reusable, UI-agnostic models and logic for flashcard-based learning experiences.
 - 🎮 [GCOverseer](https://github.com/thatfactory/gcoverseer): Observe and manage game controllers using `Combine`.  
+- 🔎 [IIIFResolver](https://github.com/thatfactory/iiifresolver): Discovers museum artworks and resolves downloadable IIIF images.
 - 🌅 [ImageTools](https://github.com/thatfactory/image-tools): Multiplatform `PhotoKit`/`Core Graphics` wrapper.  
 - 🧠 [IntelligenceBridge](https://github.com/thatfactory/intelligence-bridge): Bridges Apple intelligence capabilities such as Image Playground and Foundation Models through focused Swift integrations.
 - 📖 [LexiconKit](https://github.com/thatfactory/lexiconkit): Models and manages personal vocabulary collections, definitions, and learning metadata.
