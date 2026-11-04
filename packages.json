@@ -4,6 +4,7 @@
   "name": "Packages by ThatFactory",
   "overview": "A collection of packages authored by ThatFactory.",
   "keywords": [
+    "artwork",
     "asyncsequence",
     "automation",
     "backslash-f",
@@ -25,12 +26,14 @@
     "game development",
     "gamification",
     "helper",
+    "IIIF",
     "image manipulation",
     "image playground",
     "language",
     "learning",
     "listening",
     "logger",
+    "museum",
     "network",
     "Observation",
     "observable object",
@@ -39,6 +42,7 @@
     "PhotoKit",
     "progression",
     "reading",
+    "Rijksmuseum",
     "speaking",
     "state machine",
     "swift",
@@ -78,6 +82,9 @@
     },
     {
       "url": "https://github.com/thatfactory/gcoverseer.git"
+    },
+    {
+      "url": "https://github.com/thatfactory/iiifresolver.git"
     },
     {
       "url": "https://github.com/thatfactory/image-tools.git"
