@@ -28,7 +28,7 @@ class FakeGitHub:
                                  {"filename": "CHANGELOG.md", "status": "modified"}]}
         self.runs = {"total_count": 1, "workflow_runs": [
             {"id": 1, "run_attempt": 1, "head_sha": CANDIDATE, "head_branch": BRANCH,
-             "event": "push", "path": publication.WORKFLOW, "status": "completed",
+             "event": "push", "path": publication.WORKFLOW, "workflow_id": 7, "status": "completed",
              "conclusion": "success", "check_suite_id": 42,
              "repository": {"full_name": publication.REPOSITORY}}]}
         self.checks = {"total_count": 1, "check_runs": [
@@ -50,6 +50,8 @@ class FakeGitHub:
             return {"object": {"sha": "c" * 40 if self.change_branch and self.branch_reads > 1 else CANDIDATE}}
         if path == f"commits/{CANDIDATE}":
             return self.commit
+        if path == "actions/workflows/review-policy.yml":
+            return {"id": 7, "path": publication.WORKFLOW}
         if path.startswith("actions/workflows/"):
             return self.runs
         if "/check-runs?" in path:
@@ -100,7 +102,7 @@ class PublicationCandidateTests(unittest.TestCase):
             lambda a: a.runs["workflow_runs"].clear(),
             lambda a: a.runs["workflow_runs"][0].update(head_sha=BASE),
             lambda a: a.runs["workflow_runs"][0].update(head_branch="other"),
-            lambda a: a.runs["workflow_runs"][0].update(path="other.yml"),
+            lambda a: a.runs["workflow_runs"][0].update(workflow_id=8),
             lambda a: a.runs["workflow_runs"][0].update(conclusion="failure"),
             lambda a: a.checks["check_runs"][0].update(head_sha=BASE),
             lambda a: a.checks["check_runs"][0]["app"].update(id=1),
@@ -120,6 +122,14 @@ class PublicationCandidateTests(unittest.TestCase):
         failed.update(run_attempt=2, conclusion="failure")
         api.runs["workflow_runs"].append(failed)
         self.rejects(api)
+
+    def test_ref_qualified_workflow_path_uses_verified_workflow_id(self):
+        for suffix in ("", "@main", "@" + BRANCH, "@refs/heads/" + BRANCH):
+            with self.subTest(suffix=suffix):
+                api = FakeGitHub()
+                api.runs["workflow_runs"][0]["path"] += suffix
+                self.promote(api)
+                self.assertEqual(api.writes[0][2]["sha"], CANDIDATE)
 
     def test_unavailable_policy_evidence_cannot_promote(self):
         api = FakeGitHub()

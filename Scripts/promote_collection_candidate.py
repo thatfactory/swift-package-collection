@@ -28,12 +28,12 @@ def validate_commit(commit, base, candidate):
                 for f in files), "Candidate changes more than generated metadata.")
 
 
-def policy_state(runs, checks, branch, candidate):
+def policy_state(runs, checks, branch, candidate, workflow_id):
     require(runs["total_count"] <= 100, "Policy run pagination is incomplete.")
     require(checks["total_count"] <= 100, "Policy check pagination is incomplete.")
     matching = [r for r in runs["workflow_runs"]
                 if r["head_sha"] == candidate and r["head_branch"] == branch
-                and r["event"] == "push" and r["path"] == WORKFLOW
+                and r["event"] == "push" and r["workflow_id"] == workflow_id
                 and r["repository"]["full_name"] == REPOSITORY]
     if not matching:
         return "pending"
@@ -80,11 +80,14 @@ def promote(api, branch, base, candidate, timeout=600, clock=time.monotonic, sle
     require(all(re.fullmatch(r"[0-9a-f]{40}", sha) for sha in (base, candidate)), "Invalid commit identity.")
     validate_refs(api, branch, base, candidate)
     validate_commit(api.request(f"commits/{candidate}"), base, candidate)
+    workflow = api.request("actions/workflows/review-policy.yml")
+    require(workflow["path"] == WORKFLOW and isinstance(workflow["id"], int),
+            "Unexpected policy workflow identity.")
     deadline = clock() + timeout
     while True:
         runs = api.request(f"actions/workflows/review-policy.yml/runs?head_sha={candidate}&per_page=100")
         checks = api.request(f"commits/{candidate}/check-runs?per_page=100")
-        if policy_state(runs, checks, branch, candidate) == "success":
+        if policy_state(runs, checks, branch, candidate, workflow["id"]) == "success":
             break
         require(clock() < deadline, "Candidate policy check timed out; main was not advanced.")
         sleep(15)
