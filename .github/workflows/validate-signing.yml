@@ -8,6 +8,8 @@ on:
       - Scripts/**
       - Tests/**
       - .github/workflows/validate-signing.yml
+      - .github/workflows/publish.yml
+      - .github/workflows/review-policy.yml
   workflow_dispatch:
 
 permissions:
