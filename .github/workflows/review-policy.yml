@@ -3,7 +3,7 @@ name: Review policy
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: [main, 'collection-publish/**']
 
 permissions:
   contents: read

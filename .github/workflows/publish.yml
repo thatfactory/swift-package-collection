@@ -7,6 +7,10 @@ on:
     paths-ignore:
       - CHANGELOG.md
       - packages.json
+      - AGENTS.md
+      - .github/**
+      - Scripts/**
+      - Tests/**
   workflow_dispatch:
     inputs:
       source_repo:
@@ -23,6 +27,8 @@ on:
 
 permissions:
   contents: write
+  actions: read
+  checks: read
   pages: write
   id-token: write
 
@@ -258,17 +264,43 @@ jobs:
           owner: ${{ github.repository_owner }}
           repositories: swift-package-collection
 
-      - name: Commit revision bump + changelog
+      - name: Prepare publication candidate branch
         if: env.NO_CHANGES != 'true'
+        id: candidate
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          set -euo pipefail
+          CANDIDATE_BRANCH="collection-publish/${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          gh api --method POST "repos/${GITHUB_REPOSITORY}/git/refs" \
+            -f "ref=refs/heads/${CANDIDATE_BRANCH}" -f "sha=${GITHUB_SHA}"
+          echo "branch=${CANDIDATE_BRANCH}" >> "$GITHUB_OUTPUT"
+
+      - name: Commit revision bump + changelog on candidate branch
+        if: env.NO_CHANGES != 'true'
+        id: metadata-commit
         uses: iarekylew00t/verified-bot-commit@v2
         with:
           token: ${{ steps.app-token.outputs.token }}
+          ref: refs/heads/${{ steps.candidate.outputs.branch }}
+          update-local: false
           message: >
             Update collection (rev ${{ env.NEW_REV }})
             ${{ inputs.source_repo && format('— {0} {1}', inputs.source_repo, inputs.source_version) || '' }}
           files: |
             packages.json
             CHANGELOG.md
+
+      - name: Validate and promote exact publication candidate
+        if: env.NO_CHANGES != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PUBLISH_TOKEN: ${{ steps.app-token.outputs.token }}
+          CANDIDATE_BRANCH: ${{ steps.candidate.outputs.branch }}
+          CANDIDATE_SHA: ${{ steps.metadata-commit.outputs.commit }}
+        run: |
+          python3 Scripts/promote_collection_candidate.py \
+            --branch "$CANDIDATE_BRANCH" --base "$GITHUB_SHA" --candidate "$CANDIDATE_SHA"
 
       - name: Sign collection.json
         if: env.NO_CHANGES != 'true'
