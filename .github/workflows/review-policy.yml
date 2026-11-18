@@ -9,8 +9,8 @@ permissions:
   contents: read
 
 jobs:
-  review-policy:
-    name: Review policy
+  validate-review-policy:
+    name: Validate Codex review policy
     runs-on: macos-latest
     steps:
       - name: Checkout repository
@@ -19,3 +19,22 @@ jobs:
         uses: thatfactory/agent-guidelines/.github/actions/codex-review-policy@1c957669005eea010131c53f0a4146db2ccf7859
         with:
           profile: review-only
+
+  validate-signing:
+    uses: ./.github/workflows/validate-signing.yml
+
+  review-policy:
+    name: Review policy
+    needs: [validate-review-policy, validate-signing]
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    permissions: {}
+    steps:
+      - name: Require CI to pass
+        env:
+          CI_PASSED: ${{ !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') && !contains(needs.*.result, 'skipped') }}
+        run: |
+          if [[ "$CI_PASSED" != "true" ]]; then
+            echo "::error::A CI job failed, was cancelled, or was skipped."
+            exit 1
+          fi

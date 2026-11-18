@@ -1,15 +1,7 @@
 name: Validate signing safeguards
 
 on:
-  pull_request:
-  push:
-    branches: [main]
-    paths:
-      - Scripts/**
-      - Tests/**
-      - .github/workflows/validate-signing.yml
-      - .github/workflows/publish.yml
-      - .github/workflows/review-policy.yml
+  workflow_call:
   workflow_dispatch:
 
 permissions:
